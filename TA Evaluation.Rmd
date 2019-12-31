@@ -1,0 +1,140 @@
+# step 1 read in 
+# had to use the button to import data
+
+#ok this was where I was getting stuff wrong 
+> library(readxl)
+> TA_Evaluation_2019 <- read_excel("Documents/R Play/TA Evaluation 2019.xlsx") 
+> View(TA_Evaluation_2019)
+
+#this works
+getwd()
+setwd("~/Documents/R Play")
+
+# these two combos worked!
+#update these no longer work 
+setwd("~/Documents/R Play")
+tafee<-read.delim("TA Evaluation 2019 csv.csv",header=TRUE,sep = ",")
+tafee=read.delim("~/Documents/R Play/TA Evaluation 2019 csv.csv")
+
+tafee <- read_excel("TA Evaluation 2019.xlsx")
+
+#ok this is what finally works... looks like you can't have spaces in the file name
+#update this one works
+library(readxl)
+tafee<- read_excel("~/Documents/R Play/TA Evaluation 2019.xlsx")
+
+#run name of data frame to see data set output
+tafee
+
+#dataframe is whatever the name of your dataset is called 
+
+#headings
+names(tafee)
+head(tafee)
+
+#dataset information 
+#myvariables
+#helpedlearn, approach,feedback, fairresp,communc,wellprep,respon,overall
+
+#descriptive stats
+#yay this works
+summary (tafee)
+psych::describe(tafee)
+
+#export to excel
+#export to tab delimited text file works, not excel
+#I had to delimit this CSV file because I noticed the summary output was producing one where data set didnt match up with the headings
+library (readxl)
+write.table(tafee,"~/Documents/R Play/printout.txt",sep=',')
+
+#or
+tafee=read.delim("~/Documents/R Play/TA Evaluation 2019 csv.csv", sep=",")
+
+#packages
+#summary by group of variables 
+#install psych package to get summaries 
+install.packages("psych")
+install.packages("ggplot2")
+install.packages("tidyverse")
+install.packages("readxl")
+install.packages("dplyr")
+
+#activate packages
+library(ggplot2)
+library(tidyverse)
+library(psych)
+library (readxl)
+library(dplyr)
+
+#try out summary and describe using psych package 
+#works
+describe(tafee)
+summary(tafee)
+
+#cannot have numbers start names in r
+#didnt work...
+#wanted to get summary results by grouping variables but suppose other ones work as well...
+describeBy(tafee,approach,feedback,fairresp,communc,wellprep,respon,overall)
+
+#printing out my summary and describe results to excel
+#holy shit this worked
+#yes both worked
+out<-capture.output(summary(tafee))
+cat("tafee summ",out,
+file="tafeesumm.txt", sep=",", append=TRUE)
+
+out<-capture.output(describe(tafee))
+cat("tafee descriptive",out,
+file="tafeedescrip.txt", sep=",", append=TRUE)
+
+#remember that running just the name of the file gives you output
+tafee
+
+#want to try making a histogram 
+#uhhh
+library (ggplot2)
+
+tafee<-ggplot2(tafee, aes(approach)
+ggplot(taeval1, aes(x=5)) + geom_histogram(binwidth=5)
+
+qplot(approach, geom="histogram")
+
+taeval1his <- ggplot(taeval1, aes(x=2, y=60))
+taeval1hs <- taeval1 + geom_point()
+print(taeval1)
+
+#doesnt work 
+tafee %>%
+  keep(is.numeric) %>%
+  gather() %>%
+  ggplot(aes(approach)) +
+  facet_wrap(~ key, scales = "free") +
+  geom_histogram()
+
+#lmao tafee turned into a histogram overlay...cannot run summaries on it anymore
+
+#histogram try 2
+#https://stackoverflow.com/questions/20078107/overlay-normal-curve-to-histogram-in-r
+helplearnhist<-tafee$helpedlearn
+m<-mean(helplearnhist)
+std<-sqrt(var(helplearnhist))
+hist(helplearnhist, density=6, breaks=5, prob=TRUE, 
+xlab="counts", ylim=c(0,1), main="normal curve over histogram")
+curve(dnorm(x, mean=m, sd=std), 
+col="darkblue", lwd=2, add=TRUE, yaxt="n")
+
+# Theme to be used for plots
+myTheme <-theme(
+  panel.background = element_blank(),
+  panel.border = element_blank(),
+  plot.title = element_text(hjust = 0.5))
+
+tafee %>%
+  gather() %>%
+  ggplot(aes(value)) +
+  facet_wrap(~ key, scales = 'free') +
+  geom_histogram(, fill = 'Blue') +
+  ggtitle('TA Evaluation 2019') +
+  myTheme
+
+show(ta)
